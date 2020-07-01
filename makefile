@@ -8,14 +8,14 @@ EMULATOR = qemu-system-i386
 EMULATOR_FLAGS = -kernel
 
 OBJS = obj/kasm.o obj/kc.o obj/idt.o obj/isr.o obj/kb.o obj/screen.o obj/string.o obj/system.o obj/util.o obj/shell.o
-OUTPUT = iknow/boot/kernel.bin
+OUTPUT = palitos/boot/kernel.bin
 
 run: all
 	$(EMULATOR) $(EMULATOR_FLAGS) $(OUTPUT)
 
 all:$(OBJS)
-	mkdir iknow/ -p
-	mkdir iknow/boot/ -p
+	mkdir palitos/ -p
+	mkdir palitos/boot/ -p
 	$(LINKER) $(LDFLAGS) -o $(OUTPUT) $(OBJS)
 
 obj/kasm.o:src/kernel.asm
@@ -51,18 +51,18 @@ obj/shell.o:src/shell.c
 build:all
 	#Activate the install xorr if you do not have it already installed
 	#sudo apt-get install xorriso
-	rm iknow/boot/grub/ -r -f
-	mkdir iknow/boot/grub/
-	echo set default=0 >> iknow/boot/grub/grub.cfg
-	echo set timeout=0 >> iknow/boot/grub/grub.cfg
-	echo menuentry "IKnow" { >> iknow/boot/grub/grub.cfg
-	echo         set root='(hd96)' >> iknow/boot/grub/grub.cfg
-	echo         multiboot /boot/kernel.bin >> iknow/boot/grub/grub.cfg
-	echo } >> iknow/boot/grub/grub.cfg
+	rm palitos/boot/grub/ -r -f
+	mkdir palitos/boot/grub/
+	echo set default=0 >> palitos/boot/grub/grub.cfg
+	echo set timeout=0 >> palitos/boot/grub/grub.cfg
+	echo menuentry "PalitOS" { >> palitos/boot/grub/grub.cfg
+	echo         set root='(hd96)' >> palitos/boot/grub/grub.cfg
+	echo         multiboot /boot/kernel.bin >> palitos/boot/grub/grub.cfg
+	echo } >> palitos/boot/grub/grub.cfg
 
-	grub-mkrescue -o iknow.iso iknow/
+	grub-mkrescue -o palitos.iso palitos/
 	
 clear:
 	rm -f obj/*.o
-	rm -r -f iknow/
+	rm -r -f palitos/
 	
